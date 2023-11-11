@@ -47,6 +47,18 @@
   ul {
     list-style-type: none;
   }
+  .scroll-down-link {
+    display: block;
+    padding: 15px 20px;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .scroll-down-link:hover {
+    background-color: #555;
+  }
   
   /***wrapper maintain page content width***/
   .wrapper {
