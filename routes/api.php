@@ -19,11 +19,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('auth', AuthController::class);
+Route::post('auth/register', \App\Http\Controllers\Api\Auth\RegisterController::class);
 
-Route::group(['prefix' => 'auth'], function(){
-    Route::post('/register', 'Api\Auth\AuthController@register');
-    Route::post('/login', 'Api\Auth\AuthController@login');
-    Route::post('/logout', 'Api\Auth\AuthController@logout')
-        ->middleware('auth:sanctum');
-});
+Route::post('auth/login', \App\Http\Controllers\Api\Auth\LoginController::class);
