@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Auth\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Laravel\Passport\Http\Controllers\AccessTokenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('auth/register', \App\Http\Controllers\Api\Auth\RegisterController::class);
+Route::apiResource('auth', AuthController::class);
 
-Route::post('auth/login', \App\Http\Controllers\Api\Auth\LoginController::class);
+Route::group(['prefix' => 'auth'], function () {
+    Route::post('/register', 'Api\Auth\AuthController@register');
+    Route::post('/login', 'Api\Auth\AuthController@login');
+    Route::post('/logout', 'Api\Auth\AuthController@logout')
+        ->middleware('auth:sanctum');
+});
+
+Route::post('/token', [AccessTokenController::class, 'issueToken']);
