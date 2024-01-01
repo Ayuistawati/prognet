@@ -15,8 +15,8 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $data = $request->validate([
-            'name' => ['required', 'string', 'max::255'],
-            'email' => ['required', 'string', 'max:255', 'unique:users'],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
             'device_name' => ['required']
         ]);
@@ -26,13 +26,7 @@ class AuthController extends Controller
 
         $user = User::create($data);
 
-        if (!Auth::attempt($request->only('email', 'password'))) {
-            return response()->json([
-                'message' => 'The provided credentials are incorrect',
-            ], Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
-        $accessToken = Auth::user()->createToken($request->device_name)->plainTextToken;
+        $accessToken = $user->createToken($request->device_name)->plainTextToken;
 
         return response()->json([
             'message' => 'success',
@@ -72,9 +66,9 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $request->user()->token()->delete();
+        $request->user()->tokens()->delete();
         return response()->json([
-            'message' => 'log out success'
+            'message' => 'Logout success'
         ], Response::HTTP_OK);
     }
 }
